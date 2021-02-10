@@ -1,14 +1,24 @@
 package com.revature.testmodels;
 
+import com.revature.annotations.Column;
+import com.revature.annotations.PrimaryKey;
+import com.revature.annotations.Table;
+
 /**
  * POJO for a user class, will be used for testing purposes
  */
+@Table(tableName = "app_users")
 public class User {
 
+    @PrimaryKey(columnName = "user_id")
     private int id;
+    @Column(columnName = "first_name")
     private String firstName;
+    @Column(columnName = "last_name")
     private String lastName;
+    @Column(columnName = "username")
     private String username;
+    @Column(columnName = "password")
     private String password;
 
     public User() {
