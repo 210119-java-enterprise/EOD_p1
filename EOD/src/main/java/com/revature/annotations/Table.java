@@ -8,8 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation is placed upon classes of a POJO to represent the name of the table that
- * the POJO represents within the database. The default value for the annotation is an empty
- * string if the user does not provide the table name that the POJO is in the database.
+ * the POJO represents within the database.
  */
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -18,7 +17,7 @@ public @interface Table {
 
     /**
      * The annotation representing the table name of the POJO in the database
-     * @return the string name of the table, or a default empty string
+     * @return the string name of the table
      */
-    String table() default "";
+    String tableName();
 }

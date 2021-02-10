@@ -6,17 +6,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation is placed upon the fields of a POJO to represent the columns within a
+ * This annotation is placed upon the field(s) of a POJO to represent the foreign key(s) within a
  * given table that the POJO represents.
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Column {
+public @interface ForeignKey {
 
     /**
-     * The annotation representing the column name for the field
-     * @return the string name of the column
+     * The annotation representing the column name of the foreign key in the database
+     * @return the string name of the table
      */
     String columnName();
 }
