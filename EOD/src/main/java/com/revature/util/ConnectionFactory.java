@@ -22,6 +22,7 @@ public class ConnectionFactory {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
+            System.out.println("Need to add postgresql as a dependency to your project");
             e.printStackTrace();
         }
     }
