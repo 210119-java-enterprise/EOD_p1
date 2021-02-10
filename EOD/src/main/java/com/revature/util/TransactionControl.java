@@ -7,4 +7,26 @@ package com.revature.util;
  * atomically
  */
 public class TransactionControl {
+
+    /**
+     * Empty constructor for the TransactionControl object
+     */
+    public TransactionControl(){
+
+    }
+
+    //TODO figure out what you want to pass to this method and if return should be boolean
+    public boolean commit(){
+        return false;
+    }
+
+    //TODO figure out what you want to pass to this method and if return should be boolean
+    public boolean savepoint(){
+        return false;
+    }
+
+    //TODO figure out what you want to pass to this method and if return should be boolean
+    public boolean rollback(){
+        return false;
+    }
 }
