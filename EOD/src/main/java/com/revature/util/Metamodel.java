@@ -71,7 +71,7 @@ public class Metamodel<T> {
                 return new PrimaryKeyField(field);
             }
         }
-        throw new RuntimeException("Did not find a field annotated with @Id in: " + clazz.getName());
+        throw new RuntimeException("Did not find a field annotated with @PrimaryKey in: " + clazz.getName());
     }
 
     /**
