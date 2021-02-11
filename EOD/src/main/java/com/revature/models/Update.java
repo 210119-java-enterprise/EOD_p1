@@ -13,13 +13,10 @@ public class Update {
      * needs to be the same index to the given value within the object values array.
      * @param tableName the name of the table having the entry deleted
      * @param tableColumns the array of columns within the table
-     * @param oldObjectValues the old values of the object currently in the database
-     * @param newObjectValues the new values to update the object in the database
      */
-    public Update(String tableName, String[] tableColumns,
-                  String[] oldObjectValues, String[] newObjectValues){
+    public Update(String tableName, String[] tableColumns){
         updateStatement = "";
-        stringBuilder(tableName, tableColumns, oldObjectValues, newObjectValues);
+        stringBuilder(tableName, tableColumns);
     }
 
     /**
@@ -35,22 +32,19 @@ public class Update {
      * the constructor
      * @param tableName the name of the table having the entry deleted
      * @param tableColumns the array of columns within the table
-     * @param oldObjectValues the old values of the object currently in the database
-     * @param newObjectValues the new values to update the object in the database
      */
-    private void stringBuilder(String tableName, String[] tableColumns,
-                               String[] oldObjectValues, String[] newObjectValues){
+    private void stringBuilder(String tableName, String[] tableColumns){
         int bound = tableColumns.length;
         StringBuilder set = new StringBuilder("SET ");
         StringBuilder where = new StringBuilder("WHERE ");
 
         for(int i = 0; i < bound; i++){
             if(i == (bound-1)){
-                set.append(tableColumns[i]).append(" = ").append(newObjectValues[i]).append(" ");
-                where.append(tableColumns[i]).append(" = ").append(oldObjectValues[i]).append(" ");
+                set.append(tableColumns[i]).append(" = ").append(" ? ").append(" ");
+                where.append(tableColumns[i]).append(" = ").append(" ? ").append(" ");
             }else {
-                set.append(tableColumns[i]).append(" = ").append(newObjectValues[i]).append(", ");
-                where.append(tableColumns[i]).append(" = ").append(oldObjectValues[i]).append(" and ");
+                set.append(tableColumns[i]).append(" = ").append(" ? ").append(", ");
+                where.append(tableColumns[i]).append(" = ").append(" ? ").append(" and ");
             }
         }
 
