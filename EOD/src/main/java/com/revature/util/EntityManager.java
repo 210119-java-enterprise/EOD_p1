@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class EntityManager {
 
-    private ConnectionFactory connectionFactory;
+    private static ConnectionFactory connectionFactory;
     private List<Metamodel<Class<?>>> metamodelList;
 
     private DataManipulationService dml;
@@ -70,5 +70,13 @@ public class EntityManager {
             throw new RuntimeException("Could not find class name for object within metamodel list!");
         }
         dml.insert(model, object);
+    }
+
+    /**
+     * Gets the static connection factory
+     * @return the connection factory
+     */
+    public static ConnectionFactory getConnectionFactory() {
+        return connectionFactory;
     }
 }
