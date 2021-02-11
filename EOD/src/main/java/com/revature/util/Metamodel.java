@@ -34,7 +34,7 @@ public class Metamodel<T> {
     /**
      * Constructor to create a new metamodel object, instantiates the column fields and
      * foreign key fields as empty linked lists
-     * @param clazz
+     * @param clazz the class type of the metamodel
      */
     public Metamodel(Class<T> clazz) {
         this.clazz = clazz;
@@ -111,7 +111,6 @@ public class Metamodel<T> {
         }
 
         return foreignKeyFields;
-
     }
 
 
