@@ -8,6 +8,8 @@ import com.revature.services.TransactionControlService;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Class responsible for holding all of the metamodels and
@@ -58,14 +60,18 @@ public class EntityManager {
         return (metamodelList == null) ? Collections.emptyList() : metamodelList;
     }
 
+    /**
+     * Will try and persist the object passed to the database
+     * @param object the object being persisted to the database
+     */
     public void save(Object object){
-        Metamodel<?> model = null;
-        for(Metamodel<?> m : metamodelList){
-            if(m.getClassName().equals(object.getClass().getName())){
-                model = m;
-                break;
-            }
-        }
+        Metamodel<?> model;
+        Predicate<Metamodel<?>> pred = (m) -> m.getClassName().equals(object.getClass().getName());
+        model = metamodelList.stream()
+                                .filter(pred)
+                                .collect(Collectors.toList())
+                                .get(0);
+
         if(model == null){
             throw new RuntimeException("Could not find class name for object within metamodel list!");
         }
