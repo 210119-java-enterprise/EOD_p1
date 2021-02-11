@@ -9,9 +9,7 @@ import com.revature.util.EntityManager;
 public class EODDriver {
 
     public static void main(String[] args) {
-        //TODO don't forget to change DB info
         EntityManager manager = new EntityManager("src/main/resources/simpleUserTest.properties");
         manager.addAnnotatedClass(User.class);
-        System.out.println("Welcome");
     }
 }
