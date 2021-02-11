@@ -13,11 +13,10 @@ public class Delete {
      * needs to be the same index to the given value within the object values array.
      * @param tableName the name of the table having the entry deleted
      * @param tableColumns the array of columns within the table
-     * @param objectValues the array of values that relate to each column
      */
-    public Delete(String tableName, String[] tableColumns, String[] objectValues){
+    public Delete(String tableName, String[] tableColumns){
         deleteStatement = "";
-        statementBuilder(tableName, tableColumns, objectValues);
+        statementBuilder(tableName, tableColumns);
     }
 
     /**
@@ -33,16 +32,15 @@ public class Delete {
      * the constructor
      * @param tableName the name of the table having the data inserted into
      * @param tableColumns the array of column names within the table
-     * @param objectValues the array of values corresponding to the columns
      */
-    private void statementBuilder(String tableName, String[] tableColumns, String[] objectValues){
+    private void statementBuilder(String tableName, String[] tableColumns){
         int bound = tableColumns.length;
         StringBuilder where = new StringBuilder("WHERE ");
         for(int i = 0; i < bound; i++){
             if(i == (bound-1)){
-                where.append(tableColumns[i]).append(" = ").append(objectValues[i]).append(" ");
+                where.append(tableColumns[i]).append(" = ").append(" ? ").append(" ");
             }else {
-                where.append(tableColumns[i]).append(" = ").append(objectValues[i]).append(" and ");
+                where.append(tableColumns[i]).append(" = ").append(" ? ").append(" and ");
             }
         }
         deleteStatement = "DELETE FROM " + tableName + " " + where.toString();
