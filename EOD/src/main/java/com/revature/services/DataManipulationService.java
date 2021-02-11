@@ -21,7 +21,7 @@ public class DataManipulationService {
         if(!isValidObject(object)){
             throw new RuntimeException("Invalid user, user is null");
         }
-        if(dmlDao.checkIfObjectIsInUse(model, object) == null){
+        if(dmlDao.checkIfObjectIsInUse(model, object) != null){
             throw new RuntimeException("Object already in database");
         }
         dmlDao.insert(model, object);
