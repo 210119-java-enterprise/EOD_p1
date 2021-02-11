@@ -1,6 +1,7 @@
 package com.revature.testmodels;
 
 import com.revature.annotations.Column;
+import com.revature.annotations.NotNull;
 import com.revature.annotations.PrimaryKey;
 import com.revature.annotations.Table;
 
@@ -12,13 +13,13 @@ public class User {
 
     @PrimaryKey(columnName = "user_id")
     private int id;
-    @Column(columnName = "first_name")
+    @Column(columnName = "first_name") @NotNull
     private String firstName;
-    @Column(columnName = "last_name")
+    @Column(columnName = "last_name") @NotNull
     private String lastName;
-    @Column(columnName = "username")
+    @Column(columnName = "username") @NotNull
     private String username;
-    @Column(columnName = "password")
+    @Column(columnName = "password") @NotNull
     private String password;
 
     public User() {
