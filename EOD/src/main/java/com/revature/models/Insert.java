@@ -1,5 +1,17 @@
 package com.revature.models;
 //TODO turn for loops into functional programming syntax using streams
+
+import com.revature.annotations.Column;
+import com.revature.annotations.Table;
+import com.revature.util.ColumnField;
+import com.revature.util.Metamodel;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 /**
  * This class represents the syntax for the sql insert statement
  */
@@ -11,13 +23,12 @@ public class Insert {
      * Constructor for creating an insert statement in SQL, takes in the information
      * needed in order to create the full statement. The index of the table columns array
      * needs to be the same index to the given value within the object values array.
-     * @param tableName the name of the table being inserted into
-     * @param tableColumns the array of columns within the table
-     * @param objectValues the array of values that relate to each column
+     * @param model the metamodel skeleton providing column names
+     * @param object the object values being inserted into the database
      */
-    public Insert(String tableName, String[] tableColumns, String[] objectValues){
+    public Insert(Metamodel<?> model, Object object){
         insertStatement = "";
-        statementBuilder(tableName,tableColumns,objectValues);
+        scrapeModelAndObject(model, object);
     }
 
     /**
@@ -28,25 +39,47 @@ public class Insert {
         return insertStatement;
     }
 
+    private void scrapeModelAndObject(Metamodel<?> model, Object object){
+        String tableName = object.getClass().getAnnotation(Table.class).tableName();
+        Function<ColumnField, String> func = ColumnField::getName;
+        ArrayList<String> tableColumns = (ArrayList<String>) model.getColumns()
+                                                                    .stream()
+                                                                    .map(func)
+                                                                    .collect(Collectors.toList());
+        ArrayList<String> objectValues = new ArrayList<>();
+        Field[] fields = object.getClass().getDeclaredFields();
+        for(Field f : fields){
+            f.setAccessible(true);
+            try {
+                Object value = f.get(object);
+                objectValues.add(value.toString());
+            }catch(IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        statementBuilder(tableName, tableColumns, objectValues);
+    }
+
     /**
      * Builds the SQL statement, sits in a private method to lessen the length of
      * the constructor
      * @param tableName the name of the table having the data inserted into
-     * @param tableColumns the array of column names within the table
-     * @param objectValues the array of values corresponding to the columns
+     * @param tableColumns the arraylist of column names within the table
+     * @param objectValues the arraylist of values corresponding to the columns
      */
-    private void statementBuilder(String tableName, String[] tableColumns, String[] objectValues) {
-        int bound = tableColumns.length;
+    private void statementBuilder(String tableName, ArrayList<String> tableColumns,
+                                                    ArrayList<String> objectValues) {
+        int bound = tableColumns.size();
         StringBuilder insertInto = new StringBuilder("INSERT INTO " + tableName + " (");
         StringBuilder values = new StringBuilder("VALUES (");
 
         for(int i = 0; i < bound; i++){
             if(i == (bound-1)) {
-                insertInto.append(tableColumns[i]).append(") ");
-                values.append(objectValues[i]).append(") ");
+                insertInto.append(tableColumns.get(i)).append(") ");
+                values.append(objectValues.get(i)).append(") ");
             }else {
-                insertInto.append(tableColumns[i]).append(", ");
-                values.append(objectValues[i]).append(", ");
+                insertInto.append(tableColumns.get(i)).append(", ");
+                values.append(objectValues.get(i)).append(", ");
             }
         }
         insertStatement = insertInto.toString() + values.toString();
