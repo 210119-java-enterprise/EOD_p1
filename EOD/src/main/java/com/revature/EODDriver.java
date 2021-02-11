@@ -11,5 +11,8 @@ public class EODDriver {
     public static void main(String[] args) {
         EntityManager manager = new EntityManager("src/main/resources/simpleUserTest.properties");
         manager.addAnnotatedClass(User.class);
+
+        User user = new User("Cole", "Space", "username", "password");
+        manager.save(user);
     }
 }
