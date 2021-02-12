@@ -5,7 +5,6 @@ import com.revature.models.Delete;
 import com.revature.models.Insert;
 import com.revature.models.Update;
 import com.revature.util.Metamodel;
-import static com.revature.util.EntityManager.getConnectionFactory;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -19,6 +18,12 @@ import java.util.ArrayList;
  * executed or not.
  */
 public class DataManipulationDAO {
+
+    private Connection conn;
+
+    public DataManipulationDAO(Connection conn){
+        this.conn = conn;
+    }
 
     public Object checkIfObjectIsInUse(Metamodel<?> model, Object object){
         return null;
@@ -35,7 +40,7 @@ public class DataManipulationDAO {
         ArrayList<String> objectValues = getObjectValues(object);
 
         //System.out.println(insertStatement.getInsertStatement());
-        try(Connection conn = getConnectionFactory().getConnection()){
+        try{
             PreparedStatement pstmt = conn.prepareStatement(insertStatement.getInsertStatement());
 
             for(int i = 0; i < objectValues.size(); i++){
@@ -62,7 +67,7 @@ public class DataManipulationDAO {
         int bound = oldObjectValues.size();
 
         //System.out.println(updateStatement.getUpdateStatement());
-        try(Connection conn = getConnectionFactory().getConnection()){
+        try{
             PreparedStatement pstmt = conn.prepareStatement(updateStatement.getUpdateStatement());
 
             for(int i = 0; i < bound; i++){
@@ -86,7 +91,7 @@ public class DataManipulationDAO {
         Delete deleteStatement = new Delete(model, object);
         ArrayList<String> objectValues = getObjectValues(object);
 
-        try(Connection conn = getConnectionFactory().getConnection()){
+        try{
             PreparedStatement pstmt = conn.prepareStatement(deleteStatement.getDeleteStatement());
 
             for(int i = 0; i < objectValues.size(); i++){
