@@ -1,4 +1,4 @@
-package com.revature.models;
+package com.revature.statements;
 //TODO turn for loops into functional programming syntax using streams
 
 import com.revature.annotations.Table;
@@ -21,11 +21,10 @@ public class Insert {
      * needed in order to create the full statement. The index of the table columns array
      * needs to be the same index to the given value within the object values array.
      * @param model the metamodel skeleton providing column names
-     * @param object the object values being inserted into the database
      */
-    public Insert(Metamodel<?> model, Object object){
+    public Insert(Metamodel<?> model){
         insertStatement = "";
-        scrapeModelAndObject(model, object);
+        scrapeModel(model);
     }
 
     /**
@@ -39,10 +38,9 @@ public class Insert {
     /**
      * Scrapes the metamodel for the column names
      * @param model the metamodel of the class type
-     * @param object the object the same type as the metamodel
      */
-    private void scrapeModelAndObject(Metamodel<?> model, Object object){
-        String tableName = object.getClass().getAnnotation(Table.class).tableName();
+    private void scrapeModel(Metamodel<?> model){
+        String tableName = model.getModelClass().getAnnotation(Table.class).tableName();
         Function<ColumnField, String> func = ColumnField::getColumnName;
         ArrayList<String> tableColumns = (ArrayList<String>) model.getColumns()
                                                                     .stream()
