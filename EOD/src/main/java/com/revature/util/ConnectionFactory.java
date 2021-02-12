@@ -13,7 +13,7 @@ import java.util.Properties;
  */
 public class ConnectionFactory {
 
-    private BasicDataSource bds = new BasicDataSource();
+    private static BasicDataSource bds = new BasicDataSource();
     private Properties props = new Properties();
 
     /*
@@ -39,8 +39,8 @@ public class ConnectionFactory {
             bds.setUrl(props.getProperty("url"));
             bds.setUsername(props.getProperty("admin-usr"));
             bds.setPassword(props.getProperty("admin-pw"));
-            bds.setMinIdle(3);
-            bds.setMaxIdle(6);
+            bds.setMinIdle(5);
+            bds.setMaxIdle(10);
             bds.setMaxOpenPreparedStatements(100);
         }catch(IOException e){
             e.printStackTrace();
@@ -51,7 +51,7 @@ public class ConnectionFactory {
      * Gets the connection to the database being updated
      * @return the connection to the database
      */
-    public Connection getConnection() throws SQLException{
+    public static Connection getConnection() throws SQLException{
         return bds.getConnection();
     }
 }

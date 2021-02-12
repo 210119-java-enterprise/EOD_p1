@@ -9,16 +9,14 @@ import java.util.*;
  */
 public class EntityManager {
 
-    private ConnectionFactory connectionFactory;
     private List<Metamodel<Class<?>>> metamodelList;
 
     /**
      * Creates a new entity manager with the path name to the properties file that
      * holds the database information
-     * @param connectionFactory the pool of connections to the database
+     * @param metamodelList the list of metamodels taken in by the configuration
      */
-    EntityManager(ConnectionFactory connectionFactory, List<Metamodel<Class<?>>> metamodelList){
-        this.connectionFactory = connectionFactory;
+    EntityManager(List<Metamodel<Class<?>>> metamodelList){
         this.metamodelList = metamodelList;
     }
 
@@ -29,7 +27,7 @@ public class EntityManager {
     public Session getSession() {
         Session session = null;
         try {
-            session = new Session(connectionFactory.getConnection(), this);
+            session = new Session(ConnectionFactory.getConnection(), this);
         }catch (SQLException e){
             e.printStackTrace();
         }

@@ -9,7 +9,6 @@ import java.util.List;
  */
 public class Configuration {
 
-    private ConnectionFactory connectionFactory;
     private List<Metamodel<Class<?>>> metamodelList;
 
     /**
@@ -18,7 +17,7 @@ public class Configuration {
      * @param pathName the string representation of the path name to the properties file
      */
     public Configuration(String pathName){
-        connectionFactory = new ConnectionFactory(pathName);
+        ConnectionFactory connectionFactory = new ConnectionFactory(pathName);
         metamodelList = new LinkedList<>();
     }
 
@@ -39,6 +38,6 @@ public class Configuration {
      * @return a new entity manager
      */
     public EntityManager createEntityManager(){
-        return new EntityManager(connectionFactory, metamodelList);
+        return new EntityManager(metamodelList);
     }
 }

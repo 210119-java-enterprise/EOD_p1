@@ -1,8 +1,7 @@
 package com.revature.util;
 
-import com.revature.dao.DataManipulationDAO;
-import com.revature.services.DataManipulationService;
-import com.revature.services.DataQueryService;
+import com.revature.dao.ModelDAO;
+import com.revature.services.ModelService;
 import com.revature.services.TransactionControlService;
 
 import java.sql.Connection;
@@ -15,8 +14,7 @@ public class Session {
 
     private final EntityManager entityManager;
 
-    private final DataManipulationService dml;
-    private final DataQueryService dql;
+    private final ModelService dml;
     private final TransactionControlService tcl;
 
     /**
@@ -26,10 +24,9 @@ public class Session {
      */
     Session(Connection connection, EntityManager entityManager){
         this.entityManager = entityManager;
-        final DataManipulationDAO dao = new DataManipulationDAO(connection);
+        final ModelDAO dao = new ModelDAO(connection);
 
-        dml = new DataManipulationService(dao);
-        dql = new DataQueryService();
+        dml = new ModelService(dao);
         tcl = new TransactionControlService();
     }
 
@@ -72,6 +69,31 @@ public class Session {
             throw new RuntimeException("Could not find class name for object within metamodel list!");
         }
         dml.delete(model, object);
+    }
+
+    /**
+     * Selects all rows from all columns from a specified object class
+     * @param object the object of a class the user wants all info from
+     */
+    public void selectAll(Object object){
+        Metamodel<?> model = isThereAMetamodel(object);
+        if(model == null){
+            throw new RuntimeException("Could not find class name for object within metamodel list!");
+        }
+        dml.select(model, object);
+    }
+
+    /**
+     * Selects all rows from certain columns of a specified object class
+     * @param object the object whose class the rows will come from
+     * @param columnNames the names of the columns the data comes from
+     */
+    public void selectFrom(Object object, String... columnNames){
+        Metamodel<?> model = isThereAMetamodel(object);
+        if(model == null){
+            throw new RuntimeException("Could not find class name for object within metamodel list!");
+        }
+        dml.selectFrom(model, object, columnNames);
     }
 
     /**
