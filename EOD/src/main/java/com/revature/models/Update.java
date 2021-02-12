@@ -1,5 +1,14 @@
 package com.revature.models;
 //TODO turn for loops into functional programming syntax using streams
+
+import com.revature.annotations.Table;
+import com.revature.util.ColumnField;
+import com.revature.util.Metamodel;
+
+import java.util.ArrayList;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 /**
  * This class represents the syntax for the sql update statement
  */
@@ -11,12 +20,12 @@ public class Update {
      * Constructor for creating an update statement in SQL, takes in the information
      * needed in order to create the full statement. The index of the table columns array
      * needs to be the same index to the given value within the object values array.
-     * @param tableName the name of the table having the entry deleted
-     * @param tableColumns the array of columns within the table
+     * @param model the metamodel skeleton providing column names
+     * @param object the object values being updated into the database
      */
-    public Update(String tableName, String[] tableColumns){
+    public Update(Metamodel<?> model, Object object){
         updateStatement = "";
-        stringBuilder(tableName, tableColumns);
+        scrapeModelAndObject(model, object);
     }
 
     /**
@@ -28,23 +37,39 @@ public class Update {
     }
 
     /**
+     * Scrapes the metamodel for the column names
+     * @param model the metamodel of the class type
+     * @param object the object the same type as the metamodel
+     */
+    private void scrapeModelAndObject(Metamodel<?> model, Object object){
+        String tableName = object.getClass().getAnnotation(Table.class).tableName();
+        Function<ColumnField, String> func = ColumnField::getColumnName;
+        ArrayList<String> tableColumns = (ArrayList<String>) model.getColumns()
+                                                                    .stream()
+                                                                    .map(func)
+                                                                    .collect(Collectors.toList());
+
+        statementBuilder(tableName, tableColumns);
+    }
+
+    /**
      * Builds the SQL statement, sits in a private method to lessen the length of
      * the constructor
-     * @param tableName the name of the table having the entry deleted
-     * @param tableColumns the array of columns within the table
+     * @param tableName the name of the table in the database
+     * @param tableColumns the names of the columns of the table in the database
      */
-    private void stringBuilder(String tableName, String[] tableColumns){
-        int bound = tableColumns.length;
+    private void statementBuilder(String tableName, ArrayList<String> tableColumns){
+        int bound = tableColumns.size();
         StringBuilder set = new StringBuilder("SET ");
         StringBuilder where = new StringBuilder("WHERE ");
 
         for(int i = 0; i < bound; i++){
             if(i == (bound-1)){
-                set.append(tableColumns[i]).append(" = ").append(" ? ").append(" ");
-                where.append(tableColumns[i]).append(" = ").append(" ? ").append(" ");
+                set.append(tableColumns.get(i)).append(" = ").append(" ? ").append(" ");
+                where.append(tableColumns.get(i)).append(" = ").append(" ? ").append(" ");
             }else {
-                set.append(tableColumns[i]).append(" = ").append(" ? ").append(", ");
-                where.append(tableColumns[i]).append(" = ").append(" ? ").append(" and ");
+                set.append(tableColumns.get(i)).append(" = ").append(" ? ").append(", ");
+                where.append(tableColumns.get(i)).append(" = ").append(" ? ").append(" and ");
             }
         }
 

@@ -36,6 +36,11 @@ public class Insert {
         return insertStatement;
     }
 
+    /**
+     * Scrapes the metamodel for the column names
+     * @param model the metamodel of the class type
+     * @param object the object the same type as the metamodel
+     */
     private void scrapeModelAndObject(Metamodel<?> model, Object object){
         String tableName = object.getClass().getAnnotation(Table.class).tableName();
         Function<ColumnField, String> func = ColumnField::getColumnName;
