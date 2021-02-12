@@ -7,7 +7,6 @@ import com.revature.annotations.Table;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +35,10 @@ public class Metamodel<T> {
      */
     private Metamodel(Class<T> clazz) {
         this.clazz = clazz;
+    }
+
+    public Class<T> getModelClass(){
+        return clazz;
     }
 
     /**
