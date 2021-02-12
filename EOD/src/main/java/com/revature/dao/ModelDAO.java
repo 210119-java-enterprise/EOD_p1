@@ -176,6 +176,12 @@ public class ModelDAO {
      * @return the list of objects returned from the database
      */
     private List<Object> mapResultSet(ResultSet rs, ResultSetMetaData rsmd, Object object){
+        //get column name from meta data
+        //map it to the object field using annotations
+        //create new instance of object
+        //use object getters to set the data retrieved from data set using column name
+        //add object to the list
+        //return the list
         return null;
     }
 }
