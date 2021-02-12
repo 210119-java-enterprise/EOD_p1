@@ -1,13 +1,10 @@
 package com.revature.statements;
 
 import com.revature.annotations.Table;
-import com.revature.util.ColumnField;
 import com.revature.util.Metamodel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Select {
 
