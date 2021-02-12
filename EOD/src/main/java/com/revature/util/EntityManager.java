@@ -65,17 +65,40 @@ public class EntityManager {
      * @param object the object being persisted to the database
      */
     public void save(Object object){
-        Metamodel<?> model;
-        Predicate<Metamodel<?>> pred = (m) -> m.getClassName().equals(object.getClass().getName());
-        model = metamodelList.stream()
-                                .filter(pred)
-                                .collect(Collectors.toList())
-                                .get(0);
+        Metamodel<?> model = isThereAMetamodel(object);
+        if(model == null){
+            throw new RuntimeException("No metamodel was found of class " + object.getClass().getName());
+        }
+        dml.insert(model, object);
+    }
 
+    /**
+     * Will try and update an object already persisted in the database with a new
+     * object
+     * @param newObject the object with the updated information
+     * @param oldObject the object with the old information
+     */
+    public void update(Object newObject, Object oldObject){
+        if(!newObject.getClass().getName().equals(oldObject.getClass().getName())){
+            throw new RuntimeException("Classes of the passed objects are not equal");
+        }
+        Metamodel<?> model = isThereAMetamodel(oldObject);
         if(model == null){
             throw new RuntimeException("Could not find class name for object within metamodel list!");
         }
-        dml.insert(model, object);
+        dml.update(model, newObject, oldObject);
+    }
+
+    /**
+     * Will try and delete the object passed from the database
+     * @param object the object being deleted from the database
+     */
+    public void delete(Object object){
+        Metamodel<?> model = isThereAMetamodel(object);
+        if(model == null){
+            throw new RuntimeException("Could not find class name for object within metamodel list!");
+        }
+        dml.delete(model, object);
     }
 
     /**
@@ -84,5 +107,19 @@ public class EntityManager {
      */
     public static ConnectionFactory getConnectionFactory() {
         return connectionFactory;
+    }
+
+    /**
+     * Checks to see if there is a metamodel representation of the object's class
+     * @param object the object being checked
+     * @return true if there is a metamodel, false if not
+     */
+    private Metamodel<?> isThereAMetamodel(Object object){
+        for(Metamodel<?> m : metamodelList){
+            if(object.getClass().getName().equals(m.getClassName())){
+                return m;
+            }
+        }
+        return null;
     }
 }

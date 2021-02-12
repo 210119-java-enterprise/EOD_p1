@@ -9,13 +9,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Metamodel<T> {
 
     private Class<T> clazz;
-    private PrimaryKeyField primaryKeyField;
-    private List<ForeignKeyField> foreignKeyFields;
-    private List<ColumnField> columnFields;
 
     /**
      * Creates a metamodel of class clazz, throws an exception if the class does not have
@@ -36,10 +34,8 @@ public class Metamodel<T> {
      * foreign key fields as empty linked lists
      * @param clazz the class type of the metamodel
      */
-    public Metamodel(Class<T> clazz) {
+    private Metamodel(Class<T> clazz) {
         this.clazz = clazz;
-        this.columnFields = new LinkedList<>();
-        this.foreignKeyFields = new LinkedList<>();
     }
 
     /**
@@ -63,7 +59,7 @@ public class Metamodel<T> {
      * @return the primary key of a class
      */
     public PrimaryKeyField getPrimaryKey() {
-
+        
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
@@ -80,6 +76,7 @@ public class Metamodel<T> {
      */
     public List<ColumnField> getColumns() {
 
+        List<ColumnField> columnFields = new ArrayList<>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             Column column = field.getAnnotation(Column.class);
@@ -113,5 +110,25 @@ public class Metamodel<T> {
         return foreignKeyFields;
     }
 
+    /**
+     * Checks to see if the object passed is equivalent to this current instance
+     * @param o the object being compared
+     * @return true if they are equal, false if not
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Metamodel<?> metamodel = (Metamodel<?>) o;
+        return Objects.equals(clazz, metamodel.clazz);
+    }
 
+    /**
+     * Will hash the current object
+     * @return the hashcode for the object
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(clazz);
+    }
 }
