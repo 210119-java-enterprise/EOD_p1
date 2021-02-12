@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This class speaks to the database with a user specified DML statement
@@ -62,7 +61,7 @@ public class DataManipulationDAO {
         ArrayList<String> newObjectValues = getObjectValues(newObject);
         int bound = oldObjectValues.size();
 
-        System.out.println(updateStatement.getUpdateStatement());
+        //System.out.println(updateStatement.getUpdateStatement());
         try(Connection conn = getConnectionFactory().getConnection()){
             PreparedStatement pstmt = conn.prepareStatement(updateStatement.getUpdateStatement());
 
