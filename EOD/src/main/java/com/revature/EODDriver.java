@@ -13,6 +13,15 @@ public class EODDriver {
         manager.addAnnotatedClass(User.class);
 
         User user = new User("Cole", "Space", "username", "password");
-        manager.save(user);
+        User updatedUser = new User("Cole", "Space", "test", "12345");
+//        manager.save(user);
+//        manager.save(updatedUser);
+//        System.out.println("Saved user");
+//        manager.update(updatedUser, user);
+//        System.out.println("Updated user");
+//        manager.delete(updatedUser);
+//        System.out.println("Deleted updated user");
+//        manager.delete(user);
+//        System.out.println("Deleted old user if update didn't work");
     }
 }
