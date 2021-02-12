@@ -1,9 +1,10 @@
 package com.revature.util;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -12,6 +13,7 @@ import java.util.Properties;
  */
 public class ConnectionFactory {
 
+    private BasicDataSource bds = new BasicDataSource();
     private Properties props = new Properties();
 
     /*
@@ -34,6 +36,12 @@ public class ConnectionFactory {
     public ConnectionFactory(String pathName){
         try{
             props.load(new FileReader(pathName));
+            bds.setUrl(props.getProperty("url"));
+            bds.setUsername(props.getProperty("admin-usr"));
+            bds.setPassword(props.getProperty("admin-pw"));
+            bds.setMinIdle(3);
+            bds.setMaxIdle(6);
+            bds.setMaxOpenPreparedStatements(100);
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -43,17 +51,7 @@ public class ConnectionFactory {
      * Gets the connection to the database being updated
      * @return the connection to the database
      */
-    public Connection getConnection(){
-        Connection conn = null;
-
-        try{
-            conn = DriverManager.getConnection(props.getProperty("url"),
-                    props.getProperty("admin-usr"),
-                    props.getProperty("admin-pw"));
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-
-        return conn;
+    public Connection getConnection() throws SQLException{
+        return bds.getConnection();
     }
 }
