@@ -1,19 +1,22 @@
 package com.revature.services;
 
-import com.revature.annotations.Table;
-import com.revature.dao.DataManipulationDAO;
+import com.revature.dao.ModelDAO;
+import com.revature.util.ColumnField;
 import com.revature.util.Metamodel;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * This class acts as an intermediary for the DataManipulation, which will take in
  * user input. This class will make sure that the user input is following the
  * correct implementation of this library before sending the information to the DAO.
  */
-public class DataManipulationService {
+public class ModelService {
 
-    private DataManipulationDAO dmlDao;
+    private ModelDAO dmlDao;
 
-    public DataManipulationService(DataManipulationDAO dao){
+    public ModelService(ModelDAO dao){
         dmlDao = dao;
     }
 
@@ -61,6 +64,53 @@ public class DataManipulationService {
 //            throw new RuntimeException("Object is not in database, try inserting before updating");
 //        }
         dmlDao.update(model, newObject, oldObject);
+    }
+
+    /**
+     * Basic implementation of the select sql statement
+     * @param model the metamodel of the class type
+     * @param object the instantiation of the class
+     */
+    public void select(Metamodel<?> model, Object object){
+        if(!isValidObject(object)){
+            throw new RuntimeException("Invalid user, user is null");
+        }
+        dmlDao.select(model, object);
+    }
+
+    /**
+     * Checks to make sure the column names passed are within the metamodel
+     * @param object the object whose class the rows will come from
+     * @param columnNames the names of the columns the data comes from
+     */
+    public void selectFrom(Metamodel<?> model, Object object, String... columnNames){
+        if(!isValidObject(object)){
+            throw new RuntimeException("Invalid user, user is null");
+        }
+        if(!doColumnNamesExist(model, columnNames)){
+            throw new RuntimeException("Column names passed are not in the database");
+        }
+        dmlDao.select(model, object, columnNames);
+    }
+
+    /**
+     * Checks to see if the column names passed by the user are within the column
+     * names of the metamodel that the object class represents
+     * @param model the metamodel of the object class passed by the user
+     * @param columnNames the column names passed by the user
+     * @return true if the column names are present, false if not
+     */
+    private boolean doColumnNamesExist(Metamodel<?> model, String... columnNames){
+        ArrayList<String> columnsInModel = (ArrayList<String>) model.getColumns()
+                                                                    .stream()
+                                                                    .map(ColumnField::getColumnName)
+                                                                    .collect(Collectors.toList());
+        for (String s : columnNames){
+            if(!columnsInModel.contains(s)){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
