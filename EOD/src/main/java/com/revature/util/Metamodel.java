@@ -59,7 +59,7 @@ public class Metamodel<T> {
      * @return the primary key of a class
      */
     public PrimaryKeyField getPrimaryKey() {
-        
+
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
