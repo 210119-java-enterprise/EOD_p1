@@ -34,7 +34,6 @@ public class User {
         return id;
     }
 
-    @Setter(columnName = "user_id")
     public void setId(int id) {
         this.id = id;
     }
@@ -43,7 +42,6 @@ public class User {
         return firstName;
     }
 
-    @Setter(columnName = "first_name")
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -52,7 +50,6 @@ public class User {
         return lastName;
     }
 
-    @Setter(columnName = "last_name")
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -61,7 +58,6 @@ public class User {
         return username;
     }
 
-    @Setter(columnName = "username")
     public void setUsername(String username) {
         this.username = username;
     }
@@ -70,7 +66,6 @@ public class User {
         return password;
     }
 
-    @Setter(columnName = "password")
     public void setPassword(String password) {
         this.password = password;
     }
