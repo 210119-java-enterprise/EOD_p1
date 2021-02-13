@@ -1,6 +1,9 @@
 package com.revature.dao;
 
 import com.revature.annotations.Column;
+import com.revature.annotations.ForeignKey;
+import com.revature.annotations.PrimaryKey;
+import com.revature.annotations.Serial;
 import com.revature.statements.Delete;
 import com.revature.statements.Insert;
 import com.revature.statements.Select;
@@ -39,6 +42,7 @@ public class ModelDAO {
         Insert insertStatement = new Insert(model ,object);
         ArrayList<String> objectValues = getObjectValues(object);
 
+        System.out.println(insertStatement.getInsertStatement());
         try{
             PreparedStatement pstmt = conn.prepareStatement(insertStatement.getInsertStatement());
 
@@ -153,7 +157,10 @@ public class ModelDAO {
         for(Field f : fields){
             f.setAccessible(true);
             Column column = f.getAnnotation(Column.class);
-            if(column != null) {
+            Serial serial = f.getAnnotation(Serial.class);
+            PrimaryKey primary = f.getAnnotation(PrimaryKey.class);
+            ForeignKey foreign = f.getAnnotation(ForeignKey.class);
+            if(column != null | (primary != null && serial == null) | foreign != null) {
                 try {
                     Object value = f.get(object);
                     objectValues.add(value.toString());
