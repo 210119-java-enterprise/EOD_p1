@@ -5,6 +5,9 @@ import com.revature.util.Configuration;
 import com.revature.util.EntityManager;
 import com.revature.util.Session;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Simple class to test the library outside of the JUnit testing that is required
  */
@@ -26,6 +29,12 @@ public class EODDriver {
         System.out.println("saved user 1");
         session.save(user2);
         System.out.println("saved user2");
+        List<User> firstQuery = (List<User>) session.selectAll(user1);
+        firstQuery.forEach(System.out::print);
+        System.out.println();
+        List<User> secondQuery = (List<User>) session.selectFrom(user1, "user_id", "username", "password");
+        secondQuery.forEach(System.out::print);
+        System.out.println();
         session.update(user3, user1);
         System.out.println("Updated user1 with user3");
         session.delete(user2);
