@@ -1,12 +1,11 @@
 package com.revature.util;
 
-import com.revature.annotations.Column;
-import com.revature.annotations.ForeignKey;
-import com.revature.annotations.PrimaryKey;
-import com.revature.annotations.Table;
+import com.revature.annotations.*;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,7 +82,13 @@ public class Metamodel<T> {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             Column column = field.getAnnotation(Column.class);
+            PrimaryKey primary = field.getAnnotation(PrimaryKey.class);
+            ForeignKey foreign = field.getAnnotation(ForeignKey.class);
             if (column != null) {
+                columnFields.add(new ColumnField(field));
+            }else if(primary != null){
+                columnFields.add(new ColumnField(field));
+            }else if(foreign != null){
                 columnFields.add(new ColumnField(field));
             }
         }
@@ -93,6 +98,18 @@ public class Metamodel<T> {
         }
 
         return columnFields;
+    }
+
+    /**
+     * Gets the string representation of the column names
+     * @return a list of the string representations of the column names
+     */
+    public List<String> getColumnNames(){
+        List<String> columnNames = new LinkedList<>();
+        for(ColumnField c : this.getColumns()){
+            columnNames.add(c.getColumnName());
+        }
+        return columnNames;
     }
 
     /**
@@ -111,6 +128,50 @@ public class Metamodel<T> {
         }
 
         return foreignKeyFields;
+    }
+
+    /**
+     * Finds the class type of a given column
+     * @param columnName the name of the column
+     * @return the class type of column, null if not found
+     */
+    public Class<?> findClassOfColumn(String columnName){
+        for(ColumnField c : this.getColumns()){
+            if(c.getColumnName().equals(columnName)){
+                return c.getType();
+            }
+        }
+        if(getPrimaryKey().getColumnName().equals(columnName)){
+            return getPrimaryKey().getType();
+        }
+        for(ForeignKeyField f : getForeignKeys()){
+            if(f.getColumnName().equals(columnName)){
+                return f.getType();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Finds the field name of a given column
+     * @param columnName the name of the column
+     * @return the field name of the column, null if not found
+     */
+    public String findFieldNameOfColumn(String columnName){
+        for(ColumnField c : this.getColumns()){
+            if(c.getColumnName().equals(columnName)){
+                return c.getName();
+            }
+        }
+        if(getPrimaryKey().getColumnName().equals(columnName)){
+            return getPrimaryKey().getName();
+        }
+        for(ForeignKeyField f : getForeignKeys()){
+            if(f.getColumnName().equals(columnName)){
+                return f.getName();
+            }
+        }
+        return null;
     }
 
     /**

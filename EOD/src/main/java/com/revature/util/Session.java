@@ -5,6 +5,7 @@ import com.revature.services.ModelService;
 import com.revature.services.TransactionControlService;
 
 import java.sql.Connection;
+import java.util.List;
 
 /**
  * This class represents a connection to the database that allows for the user
@@ -75,12 +76,12 @@ public class Session {
      * Selects all rows from all columns from a specified object class
      * @param object the object of a class the user wants all info from
      */
-    public void selectAll(Object object){
+    public List<?> selectAll(Object object){
         Metamodel<?> model = isThereAMetamodel(object);
         if(model == null){
             throw new RuntimeException("Could not find class name for object within metamodel list!");
         }
-        dml.select(model, object);
+        return dml.select(model, object);
     }
 
     /**
@@ -88,12 +89,12 @@ public class Session {
      * @param object the object whose class the rows will come from
      * @param columnNames the names of the columns the data comes from
      */
-    public void selectFrom(Object object, String... columnNames){
+    public List<?> selectFrom(Object object, String... columnNames){
         Metamodel<?> model = isThereAMetamodel(object);
         if(model == null){
             throw new RuntimeException("Could not find class name for object within metamodel list!");
         }
-        dml.selectFrom(model, object, columnNames);
+        return dml.selectFrom(model, object, columnNames);
     }
 
     /**
