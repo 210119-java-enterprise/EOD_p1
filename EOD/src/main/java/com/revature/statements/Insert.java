@@ -1,12 +1,16 @@
 package com.revature.statements;
 //TODO turn for loops into functional programming syntax using streams
 
-import com.revature.annotations.Table;
+import com.revature.annotations.*;
 import com.revature.util.ColumnField;
 import com.revature.util.Metamodel;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -21,10 +25,11 @@ public class Insert {
      * needed in order to create the full statement. The index of the table columns array
      * needs to be the same index to the given value within the object values array.
      * @param model the metamodel skeleton providing column names
+     * @param object the object being inserted into the database
      */
-    public Insert(Metamodel<?> model){
+    public Insert(Metamodel<?> model, Object object){
         insertStatement = "";
-        scrapeModel(model);
+        scrapeModel(model, object);
     }
 
     /**
@@ -39,13 +44,24 @@ public class Insert {
      * Scrapes the metamodel for the column names
      * @param model the metamodel of the class type
      */
-    private void scrapeModel(Metamodel<?> model){
+    private void scrapeModel(Metamodel<?> model, Object object){
         String tableName = model.getModelClass().getAnnotation(Table.class).tableName();
-        Function<ColumnField, String> func = ColumnField::getColumnName;
-        ArrayList<String> tableColumns = (ArrayList<String>) model.getColumns()
-                                                                    .stream()
-                                                                    .map(func)
-                                                                    .collect(Collectors.toList());
+        ArrayList<String> tableColumns = new ArrayList<>();
+        for(Field f : object.getClass().getDeclaredFields()){
+            Serial tag = f.getAnnotation(Serial.class);
+            if(tag == null){
+                Column column = f.getAnnotation(Column.class);
+                PrimaryKey primary = f.getAnnotation(PrimaryKey.class);
+                ForeignKey foreign = f.getAnnotation(ForeignKey.class);
+                if (column != null) {
+                    tableColumns.add(column.columnName());
+                }else if(primary != null){
+                    tableColumns.add(primary.columnName());
+                }else if(foreign != null){
+                    tableColumns.add(foreign.columnName());
+                }
+            }
+        }
         statementBuilder(tableName, tableColumns);
     }
 

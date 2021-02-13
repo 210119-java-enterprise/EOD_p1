@@ -46,7 +46,10 @@ public class Select {
      */
     private void selectFrom(Metamodel<?> model, String... columnNames){
         String tableName = model.getModelClass().getAnnotation(Table.class).tableName();
-        ArrayList<String> listOfColumns = (ArrayList<String>) Arrays.asList(columnNames);
+        ArrayList<String> listOfColumns = new ArrayList<>();
+        for(String s : columnNames){
+            listOfColumns.add(s);
+        }
         statementBuilder(tableName, listOfColumns);
     }
 
