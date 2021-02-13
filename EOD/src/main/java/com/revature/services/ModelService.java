@@ -5,6 +5,7 @@ import com.revature.util.ColumnField;
 import com.revature.util.Metamodel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -71,11 +72,11 @@ public class ModelService {
      * @param model the metamodel of the class type
      * @param object the instantiation of the class
      */
-    public void select(Metamodel<?> model, Object object){
+    public List<?> select(Metamodel<?> model, Object object){
         if(!isValidObject(object)){
             throw new RuntimeException("Invalid user, user is null");
         }
-        dmlDao.select(model, object);
+        return dmlDao.select(model, object);
     }
 
     /**
@@ -83,14 +84,14 @@ public class ModelService {
      * @param object the object whose class the rows will come from
      * @param columnNames the names of the columns the data comes from
      */
-    public void selectFrom(Metamodel<?> model, Object object, String... columnNames){
+    public List<?> selectFrom(Metamodel<?> model, Object object, String... columnNames){
         if(!isValidObject(object)){
             throw new RuntimeException("Invalid user, user is null");
         }
         if(!doColumnNamesExist(model, columnNames)){
             throw new RuntimeException("Column names passed are not in the database");
         }
-        dmlDao.select(model, object, columnNames);
+        return dmlDao.select(model, object, columnNames);
     }
 
     /**
