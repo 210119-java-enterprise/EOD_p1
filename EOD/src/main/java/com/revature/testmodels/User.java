@@ -1,9 +1,6 @@
 package com.revature.testmodels;
 
-import com.revature.annotations.Column;
-import com.revature.annotations.NotNull;
-import com.revature.annotations.PrimaryKey;
-import com.revature.annotations.Table;
+import com.revature.annotations.*;
 
 /**
  * POJO for a user class, will be used for testing purposes
@@ -11,7 +8,7 @@ import com.revature.annotations.Table;
 @Table(tableName = "app_users")
 public class User {
 
-    @PrimaryKey(columnName = "user_id")
+    @PrimaryKey(columnName = "user_id") @Serial
     private int id;
     @Column(columnName = "first_name") @NotNull
     private String firstName;
@@ -37,6 +34,7 @@ public class User {
         return id;
     }
 
+    @Setter(columnName = "user_id")
     public void setId(int id) {
         this.id = id;
     }
@@ -45,6 +43,7 @@ public class User {
         return firstName;
     }
 
+    @Setter(columnName = "first_name")
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -53,6 +52,7 @@ public class User {
         return lastName;
     }
 
+    @Setter(columnName = "last_name")
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -61,6 +61,7 @@ public class User {
         return username;
     }
 
+    @Setter(columnName = "username")
     public void setUsername(String username) {
         this.username = username;
     }
@@ -69,6 +70,7 @@ public class User {
         return password;
     }
 
+    @Setter(columnName = "password")
     public void setPassword(String password) {
         this.password = password;
     }
