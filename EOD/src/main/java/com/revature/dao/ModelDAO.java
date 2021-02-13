@@ -6,11 +6,11 @@ import com.revature.statements.Insert;
 import com.revature.statements.Select;
 import com.revature.statements.Update;
 import com.revature.util.Metamodel;
-import sun.management.VMOptionCompositeData;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -36,11 +36,9 @@ public class ModelDAO {
      * @param object the data being persisted
      */
     public void insert(Metamodel<?> model, Object object){
-        //TODO for prepared statements, you need to assign the values to ? in the statement string
-        Insert insertStatement = new Insert(model);
+        Insert insertStatement = new Insert(model ,object);
         ArrayList<String> objectValues = getObjectValues(object);
 
-        //System.out.println(insertStatement.getInsertStatement());
         try{
             PreparedStatement pstmt = conn.prepareStatement(insertStatement.getInsertStatement());
 
@@ -62,12 +60,11 @@ public class ModelDAO {
      * @param oldObject the data being overwritten
      */
     public void update(Metamodel<?> model, Object newObject, Object oldObject){
-        Update updateStatement = new Update(model);
+        Update updateStatement = new Update(model, oldObject);
         ArrayList<String> oldObjectValues = getObjectValues(oldObject);
         ArrayList<String> newObjectValues = getObjectValues(newObject);
         int bound = oldObjectValues.size();
 
-        //System.out.println(updateStatement.getUpdateStatement());
         try{
             PreparedStatement pstmt = conn.prepareStatement(updateStatement.getUpdateStatement());
 
@@ -89,7 +86,7 @@ public class ModelDAO {
      * @param object the data being deleted
      */
     public void delete(Metamodel<?> model, Object object){
-        Delete deleteStatement = new Delete(model);
+        Delete deleteStatement = new Delete(model, object);
         ArrayList<String> objectValues = getObjectValues(object);
 
         try{
@@ -110,18 +107,18 @@ public class ModelDAO {
      * Selects some user specified data from the database, a select *
      * @param model the model of the class being select
      */
-    public void select(Metamodel<?> model, Object object){
+    public List<?> select(Metamodel<?> model, Object object){
         Select selectStatement = new Select(model);
-        List<Object> listOfObjects;
+        List<Object> listOfObjects = new LinkedList<>();
         try{
             PreparedStatement pstmt = conn.prepareStatement(selectStatement.getSelectStatement());
             ResultSet rs = pstmt.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
-            listOfObjects = mapResultSet(rs, rsmd, object);
-
+            listOfObjects = mapResultSet(rs, rsmd, object, model);
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return listOfObjects;
     }
 
     /**
@@ -130,18 +127,18 @@ public class ModelDAO {
      * @param object the object being passed by the user
      * @param columnNames the list of column names specified by the user
      */
-    public void select(Metamodel<?> model, Object object, String... columnNames){
+    public List<?> select(Metamodel<?> model, Object object, String... columnNames){
         Select selectStatement = new Select(model, columnNames);
-        List<Object> listOfObject;
+        List<Object> listOfObjects = new LinkedList<>();
         try{
             PreparedStatement pstmt = conn.prepareStatement(selectStatement.getSelectStatement());
             ResultSet rs = pstmt.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
-            listOfObject = mapResultSet(rs, rsmd, object);
-
+            listOfObjects = mapResultSet(rs, rsmd, object, model);
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return listOfObjects;
     }
 
     /**
@@ -175,13 +172,34 @@ public class ModelDAO {
      * @param object the object composing the list
      * @return the list of objects returned from the database
      */
-    private List<Object> mapResultSet(ResultSet rs, ResultSetMetaData rsmd, Object object){
-        //get column name from meta data
-        //map it to the object field using annotations
-        //create new instance of object
-        //use object getters to set the data retrieved from data set using column name
-        //add object to the list
-        //return the list
-        return null;
+    private List<Object> mapResultSet(ResultSet rs, ResultSetMetaData rsmd, Object object, Metamodel<?> model){
+        List<Object> objectsFromQuery = new LinkedList<>();
+        try {
+            List<String> columnsInResultSet = new LinkedList<>();
+            int bound = rsmd.getColumnCount();
+            for(int i = 0; i < bound; i++){
+                columnsInResultSet.add(rsmd.getColumnName(i+1));
+            }
+
+            while(rs.next()){
+
+                Object newObject = object.getClass().getConstructor().newInstance();
+
+                for(String s : columnsInResultSet){
+                    Class<?> type = model.findClassOfColumn(s);
+                    Object objectValue = rs.getObject(s);
+
+                    String name = model.findFieldNameOfColumn(s);
+                    String methodName = name.substring(0,1).toUpperCase() + name.substring(1);
+
+                    Method method = object.getClass().getMethod("set" + methodName, type);
+                    method.invoke(newObject, objectValue);
+                }
+                objectsFromQuery.add(newObject);
+            }
+        } catch (SQLException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return objectsFromQuery;
     }
 }
