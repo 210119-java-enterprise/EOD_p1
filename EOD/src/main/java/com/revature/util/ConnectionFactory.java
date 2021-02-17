@@ -33,7 +33,7 @@ public class ConnectionFactory {
      * Creates a new connection factory by specifying the path to your properties file
      * @param pathName the string representation of the path to your properties file
      */
-    public ConnectionFactory(String pathName){
+    ConnectionFactory(String pathName){
         try{
             props.load(new FileReader(pathName));
             bds.setUrl(props.getProperty("url"));

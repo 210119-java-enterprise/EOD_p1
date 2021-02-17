@@ -2,7 +2,6 @@ package com.revature.util;
 
 import com.revature.dao.ModelDAO;
 import com.revature.services.ModelService;
-import com.revature.services.TransactionControlService;
 
 import java.sql.Connection;
 import java.util.List;
@@ -16,7 +15,6 @@ public class Session {
     private final EntityManager entityManager;
 
     private final ModelService dml;
-    private final TransactionControlService tcl;
 
     /**
      * Creates a new session object
@@ -28,7 +26,6 @@ public class Session {
         final ModelDAO dao = new ModelDAO(connection);
 
         dml = new ModelService(dao);
-        tcl = new TransactionControlService();
     }
 
     /**

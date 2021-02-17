@@ -3,12 +3,16 @@ package com.revature.util;
 import com.revature.annotations.*;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class represents the meta model of object classes passed by the
+ * user that is using this library
+ * @param <T> the generic object class type
+ */
 public class Metamodel<T> {
 
     private Class<T> clazz;
@@ -36,6 +40,10 @@ public class Metamodel<T> {
         this.clazz = clazz;
     }
 
+    /**
+     * Gets the class type of the object of the metamodel instance
+     * @return the class type of the object
+     */
     public Class<T> getModelClass(){
         return clazz;
     }
