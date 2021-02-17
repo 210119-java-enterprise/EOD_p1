@@ -1,14 +1,10 @@
 package com.revature.statements;
-//TODO turn for loops into functional programming syntax using streams
 
 import com.revature.annotations.*;
-import com.revature.util.ColumnField;
 import com.revature.util.Metamodel;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * This class represents the syntax for the sql update statement

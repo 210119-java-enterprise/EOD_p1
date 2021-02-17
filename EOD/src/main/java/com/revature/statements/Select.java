@@ -4,7 +4,6 @@ import com.revature.annotations.Table;
 import com.revature.util.Metamodel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Select {
 
