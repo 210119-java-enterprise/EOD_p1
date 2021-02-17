@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation is placed upon the field(s) of a POJO to represent the foreign key(s) within a
- * given table that the POJO represents.
+ * given table that the POJO represents. Not implemented
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

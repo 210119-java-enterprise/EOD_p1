@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation is placed upon the serial values in a database for a POJO to exclude
- * these items from insertions and deletions
+ * these items from insertions and deletions, not implemented
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
