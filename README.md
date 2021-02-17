@@ -23,7 +23,7 @@ There are four main components to the ORM:
   
 ### Annotations
 
-There are 3 currently implemented annotations within the ORM:
+There are 4 currently implemented annotations within the ORM:
 
   1. **@Table** Used to annotate POJO (Plain Old Java Object) classes, must provide the name of the table that the
                 POJO represents within the database. ex @Table(tableName = "users")
@@ -34,6 +34,9 @@ There are 3 currently implemented annotations within the ORM:
   4. **@Serial** Used to annotate POJO fields that are the primary key within the database as well as a serial value
                  in the database, meaning that the user does not set this value when inserting new entries.
                  ex @PrimaryKey(columnName = "user_id") @Serial
+                 
+The POJO classes must have a no-args constructor in order for the ORM to function correctly. All getters and setters must be
+implemented as well, where the method name follows the convention "get"/"set" + the field name that it is getting or setting.
   
 ### Configuration Object
 
