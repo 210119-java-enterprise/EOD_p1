@@ -49,11 +49,10 @@ public class ModelDAO {
      * @param model the model of the class being inserted
      * @param object the data being persisted
      */
-    public void insert(Metamodel<?> model, Object object){
+    public int insert(Metamodel<?> model, Object object){
         Insert insertStatement = new Insert(model ,object);
         ArrayList<String> objectValues = getObjectValues(object);
 
-        System.out.println(insertStatement.getInsertStatement());
         try{
             PreparedStatement pstmt = conn.prepareStatement(insertStatement.getInsertStatement());
 
@@ -61,11 +60,14 @@ public class ModelDAO {
                 pstmt.setObject(i + 1, objectValues.get(i));
             }
 
-            pstmt.executeUpdate();
+            return pstmt.executeUpdate();
+
+
 
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return 0;
     }
 
     /**
@@ -74,10 +76,11 @@ public class ModelDAO {
      * @param newObject the data being updated
      * @param oldObject the data being overwritten
      */
-    public void update(Metamodel<?> model, Object newObject, Object oldObject){
+    public int update(Metamodel<?> model, Object newObject, Object oldObject){
         Update updateStatement = new Update(model, oldObject);
         ArrayList<String> oldObjectValues = getObjectValues(oldObject);
         ArrayList<String> newObjectValues = getObjectValues(newObject);
+
         int bound = oldObjectValues.size();
 
         try{
@@ -85,14 +88,15 @@ public class ModelDAO {
 
             for(int i = 0; i < bound; i++){
                 pstmt.setObject(i+1, newObjectValues.get(i));
-                pstmt.setObject(i+5, oldObjectValues.get(i));
+                pstmt.setObject(i+bound+1, oldObjectValues.get(i));
             }
 
-            pstmt.executeUpdate();
+            return pstmt.executeUpdate();
 
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return 0;
     }
 
     /**
@@ -100,7 +104,7 @@ public class ModelDAO {
      * @param model the model of the class being deleted
      * @param object the data being deleted
      */
-    public void delete(Metamodel<?> model, Object object){
+    public int delete(Metamodel<?> model, Object object){
         Delete deleteStatement = new Delete(model, object);
         ArrayList<String> objectValues = getObjectValues(object);
 
@@ -111,11 +115,12 @@ public class ModelDAO {
                 pstmt.setObject(i + 1, objectValues.get(i));
             }
 
-            pstmt.executeUpdate();
+            return pstmt.executeUpdate();
 
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return 0;
     }
 
     /**
