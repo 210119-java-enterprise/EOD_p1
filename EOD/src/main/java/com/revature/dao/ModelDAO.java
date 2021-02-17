@@ -25,10 +25,21 @@ public class ModelDAO {
 
     private Connection conn;
 
+    /**
+     * Creates a new model dao object
+     * @param conn the connection used by the dao
+     */
     public ModelDAO(Connection conn){
         this.conn = conn;
     }
 
+    /**
+     * Checks to see if the object being passed is already within the
+     * database. Not implemented
+     * @param model the metamodel of the object class
+     * @param object the object being checked
+     * @return the object if it is in, null if not
+     */
     public Object checkIfObjectIsInUse(Metamodel<?> model, Object object){
         return null;
     }
