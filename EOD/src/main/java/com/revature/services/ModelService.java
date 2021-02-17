@@ -17,6 +17,10 @@ public class ModelService {
 
     private ModelDAO dmlDao;
 
+    /**
+     * Creates a new model service with a model dao
+     * @param dao the dao for the model service
+     */
     public ModelService(ModelDAO dao){
         dmlDao = dao;
     }
@@ -30,9 +34,9 @@ public class ModelService {
         if(!isValidObject(object)){
             throw new RuntimeException("Invalid user, user is null");
         }
-        if(dmlDao.checkIfObjectIsInUse(model, object) != null){
-            throw new RuntimeException("Object already in database");
-        }
+//        if(dmlDao.checkIfObjectIsInUse(model, object) != null){
+//            throw new RuntimeException("Object already in database");
+//        }
         dmlDao.insert(model, object);
     }
 
