@@ -1,6 +1,5 @@
 package com.revature.util;
 
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -25,13 +24,7 @@ public class EntityManager {
      * @return a new session to the database
      */
     public Session getSession() {
-        Session session = null;
-        try {
-            session = new Session(ConnectionFactory.getConnection(), this);
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return session;
+        return new Session(metamodelList);
     }
 
     /**

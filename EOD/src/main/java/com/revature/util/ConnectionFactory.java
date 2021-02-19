@@ -39,9 +39,10 @@ public class ConnectionFactory {
             bds.setUrl(props.getProperty("url"));
             bds.setUsername(props.getProperty("admin-usr"));
             bds.setPassword(props.getProperty("admin-pw"));
-            bds.setMinIdle(5);
-            bds.setMaxIdle(10);
-            bds.setMaxOpenPreparedStatements(100);
+            bds.setMinIdle(3);
+            bds.setMaxIdle(6);
+            bds.setMaxOpenPreparedStatements(50);
+            bds.setMaxWaitMillis(1000);
         }catch(IOException e){
             e.printStackTrace();
         }

@@ -3,7 +3,6 @@ package com.revature.util;
 import com.revature.dao.ModelDAO;
 import com.revature.services.ModelService;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -12,18 +11,17 @@ import java.util.List;
  */
 public class Session {
 
-    private final EntityManager entityManager;
+    private List<Metamodel<Class<?>>> metamodelList;
 
-    private final ModelService dml;
+    private ModelService dml;
 
     /**
      * Creates a new session object
-     * @param connection the connection to the database
-     * @param entityManager the entity manager managing the current sessions
+     * @param metamodelList the list of metamodels the entity manager has
      */
-    Session(Connection connection, EntityManager entityManager){
-        this.entityManager = entityManager;
-        final ModelDAO dao = new ModelDAO(connection);
+    Session(List<Metamodel<Class<?>>> metamodelList){
+        this.metamodelList = metamodelList;
+        ModelDAO dao = new ModelDAO();
 
         dml = new ModelService(dao);
     }
@@ -100,7 +98,7 @@ public class Session {
      * @return true if there is a metamodel, false if not
      */
     private Metamodel<?> isThereAMetamodel(Object object){
-        for(Metamodel<?> m : entityManager.getMetamodels()){
+        for(Metamodel<?> m : metamodelList){
             if(object.getClass().getName().equals(m.getClassName())){
                 return m;
             }

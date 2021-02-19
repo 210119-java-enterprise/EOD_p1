@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.revature.dao.ModelDAOTest
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.308 sec
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.031 sec
