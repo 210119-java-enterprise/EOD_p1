@@ -8,6 +8,7 @@ import com.revature.statements.Delete;
 import com.revature.statements.Insert;
 import com.revature.statements.Select;
 import com.revature.statements.Update;
+import com.revature.util.ConnectionFactory;
 import com.revature.util.Metamodel;
 
 import java.lang.reflect.*;
@@ -23,14 +24,11 @@ import java.util.List;
  */
 public class ModelDAO {
 
-    private Connection conn;
-
     /**
      * Creates a new model dao object
-     * @param conn the connection used by the dao
      */
-    public ModelDAO(Connection conn){
-        this.conn = conn;
+    public ModelDAO(){
+        super();
     }
 
     /**
@@ -50,24 +48,23 @@ public class ModelDAO {
      * @param object the data being persisted
      */
     public int insert(Metamodel<?> model, Object object){
+        int result = 0;
         Insert insertStatement = new Insert(model ,object);
         ArrayList<String> objectValues = getObjectValues(object);
 
         try{
+            Connection conn = ConnectionFactory.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(insertStatement.getInsertStatement());
 
             for(int i = 0; i < objectValues.size(); i++){
                 pstmt.setObject(i + 1, objectValues.get(i));
             }
-
-            return pstmt.executeUpdate();
-
-
-
+            result = pstmt.executeUpdate();
+            conn.close();
         }catch(SQLException e){
             e.printStackTrace();
         }
-        return 0;
+        return result;
     }
 
     /**
@@ -77,6 +74,7 @@ public class ModelDAO {
      * @param oldObject the data being overwritten
      */
     public int update(Metamodel<?> model, Object newObject, Object oldObject){
+        int result = 0;
         Update updateStatement = new Update(model, oldObject);
         ArrayList<String> oldObjectValues = getObjectValues(oldObject);
         ArrayList<String> newObjectValues = getObjectValues(newObject);
@@ -84,19 +82,19 @@ public class ModelDAO {
         int bound = oldObjectValues.size();
 
         try{
+            Connection conn = ConnectionFactory.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(updateStatement.getUpdateStatement());
 
             for(int i = 0; i < bound; i++){
                 pstmt.setObject(i+1, newObjectValues.get(i));
                 pstmt.setObject(i+bound+1, oldObjectValues.get(i));
             }
-
-            return pstmt.executeUpdate();
-
+            result = pstmt.executeUpdate();
+            conn.close();
         }catch(SQLException e){
             e.printStackTrace();
         }
-        return 0;
+        return result;
     }
 
     /**
@@ -105,22 +103,23 @@ public class ModelDAO {
      * @param object the data being deleted
      */
     public int delete(Metamodel<?> model, Object object){
+        int result = 0;
         Delete deleteStatement = new Delete(model, object);
         ArrayList<String> objectValues = getObjectValues(object);
 
         try{
+            Connection conn = ConnectionFactory.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(deleteStatement.getDeleteStatement());
 
             for(int i = 0; i < objectValues.size(); i++){
                 pstmt.setObject(i + 1, objectValues.get(i));
             }
-
-            return pstmt.executeUpdate();
-
+            result = pstmt.executeUpdate();
+            conn.close();
         }catch(SQLException e){
             e.printStackTrace();
         }
-        return 0;
+        return result;
     }
 
     /**
@@ -131,10 +130,12 @@ public class ModelDAO {
         Select selectStatement = new Select(model);
         List<Object> listOfObjects = new LinkedList<>();
         try{
+            Connection conn = ConnectionFactory.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(selectStatement.getSelectStatement());
             ResultSet rs = pstmt.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
             listOfObjects = mapResultSet(rs, rsmd, object, model);
+            conn.close();
         }catch(SQLException e){
             e.printStackTrace();
         }
@@ -151,10 +152,12 @@ public class ModelDAO {
         Select selectStatement = new Select(model, columnNames);
         List<Object> listOfObjects = new LinkedList<>();
         try{
+            Connection conn = ConnectionFactory.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(selectStatement.getSelectStatement());
             ResultSet rs = pstmt.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
             listOfObjects = mapResultSet(rs, rsmd, object, model);
+            conn.close();
         }catch(SQLException e){
             e.printStackTrace();
         }
