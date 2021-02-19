@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="8" failures="0" name="com.revature.dao.ModelDAOTest" time="11.217" errors="0" skipped="0">
+<testsuite tests="8" failures="0" name="com.revature.dao.ModelDAOTest" time="6.95" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_281\jre\bin"/>
@@ -65,12 +65,12 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.revature.dao.ModelDAOTest" name="test_selectAll_withAnInputInDB" time="3.47"/>
-  <testcase classname="com.revature.dao.ModelDAOTest" name="test_selectSome_withAnInputInDB" time="1.133"/>
-  <testcase classname="com.revature.dao.ModelDAOTest" name="test_insert_withClassWithSerialPrimaryKey" time="1.054"/>
-  <testcase classname="com.revature.dao.ModelDAOTest" name="test_delete" time="1.247"/>
-  <testcase classname="com.revature.dao.ModelDAOTest" name="test_selectAll_withAnInputNotInDB" time="0.953"/>
-  <testcase classname="com.revature.dao.ModelDAOTest" name="test_update" time="1.397"/>
-  <testcase classname="com.revature.dao.ModelDAOTest" name="test_selectSome_withAnInputNotInDB" time="0.943"/>
-  <testcase classname="com.revature.dao.ModelDAOTest" name="test_insert_withClassWithNonSerialPrimaryKey" time="1.02"/>
+  <testcase classname="com.revature.dao.ModelDAOTest" name="test_selectAll_withAnInputInDB" time="3.641"/>
+  <testcase classname="com.revature.dao.ModelDAOTest" name="test_selectSome_withAnInputInDB" time="0.541"/>
+  <testcase classname="com.revature.dao.ModelDAOTest" name="test_insert_withClassWithSerialPrimaryKey" time="0.351"/>
+  <testcase classname="com.revature.dao.ModelDAOTest" name="test_delete" time="0.697"/>
+  <testcase classname="com.revature.dao.ModelDAOTest" name="test_selectAll_withAnInputNotInDB" time="0.172"/>
+  <testcase classname="com.revature.dao.ModelDAOTest" name="test_update" time="1.034"/>
+  <testcase classname="com.revature.dao.ModelDAOTest" name="test_selectSome_withAnInputNotInDB" time="0.172"/>
+  <testcase classname="com.revature.dao.ModelDAOTest" name="test_insert_withClassWithNonSerialPrimaryKey" time="0.342"/>
 </testsuite>

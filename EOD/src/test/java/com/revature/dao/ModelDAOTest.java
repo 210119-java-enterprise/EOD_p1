@@ -8,8 +8,6 @@ import com.revature.util.Metamodel;
 import org.junit.*;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ModelDAOTest {
@@ -26,7 +24,7 @@ public class ModelDAOTest {
 
         Configuration config = new Configuration("src/main/resources/simpleUserTest.properties");
 
-        modelDaoDut = new ModelDAO(ConnectionFactory.getConnection());
+        modelDaoDut = new ModelDAO();
 
         band = new TestBand("Trivium", "Heafy", "Corey", "Heafy", "Paulo", "Alex");
         user = new TestUser("Cole", "Space", "cspace", "password");
