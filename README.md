@@ -12,6 +12,10 @@ In order for the ORM to be able to connect to your database, you will need to cr
   
 This .properties filepath needs to be passed when creating the Configuration object
 
+This project is stored in my local m2 folder, so if somehow you can add this as a dependency into your own project, I just have one question:
+
+ * **HOW???**
+
 # Usage
 
 There are four main components to the ORM:
