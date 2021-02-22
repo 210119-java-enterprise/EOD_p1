@@ -1,6 +1,9 @@
 ## Emissary of Dissimulation (EOD)
 
-EOD is a very bare bones ORM that asbtracts basic SQL CRUD methods from your java program. Only works with the postgresql driver currently
+EOD is a small ORM using annotations that asbtracts basic SQL CRUD methods from your java program. The CRUD methods that are implemented within
+the ORM are insert statements with serial and non serial primary keys, delete statements, update statements and two forms of select statements:
+a select all from the table within the database and a select certain columns from the table. Below is how you setup and use the ORM. EOD also
+implements a small amount of connection pooling for multi-threaded applications.
 
 # Setup
 
