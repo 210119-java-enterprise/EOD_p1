@@ -5,6 +5,11 @@ the ORM are insert statements with serial and non serial primary keys, delete st
 a select all from the table within the database and a select certain columns from the table. Below is how you setup and use the ORM. EOD also
 implements a small amount of connection pooling for multi-threaded applications.
 
+# Technologies Used
+
+Maven
+PostgreSQL database hosted on a RDS through AWS
+
 # Setup
 
 In order for the ORM to be able to connect to your database, you will need to create a .properties file that holds:
@@ -14,10 +19,6 @@ In order for the ORM to be able to connect to your database, you will need to cr
   * **admin-pw** the password for the admin user
   
 This .properties filepath needs to be passed when creating the Configuration object
-
-This project is stored in my local m2 folder, so if somehow you can add this as a dependency into your own project, I just have one question:
-
- * **HOW???**
 
 # Usage
 
@@ -91,10 +92,6 @@ CRUD methods that can persist the objects created to the database:
   * session.selectFrom(Object o, String... columnNames) selects only the column names provided from the table that object
                                                         o's class represents in the database
 
-# Wanna help?
-
-Does my lack of features compel you to reach out and help flush out my ORM? Feel free to create a branch and pull down my
-ORM to try and implement new ideas. If you are blessed by the gods and I like your additions, I just might steal them and
-give you no credit /s.
+# Want to help?
 
 All notes and additions are appreciated and will definitely be considered to be merged into the master branch
