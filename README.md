@@ -8,6 +8,7 @@ implements a small amount of connection pooling for multi-threaded applications.
 # Technologies Used
 
 Maven
+
 PostgreSQL database hosted on a RDS through AWS
 
 # Setup
